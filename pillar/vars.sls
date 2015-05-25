@@ -3,7 +3,7 @@ global:
   ipv4: <your ipv4 address>
 
 postfix:
-  mydomain: thorko.de
+  mydomain: <yourdomain>
   # mydestination = your domains the mailserver will accept
   mydestination: <domains seperated by comma>
   db_user: postfix
@@ -11,8 +11,8 @@ postfix:
   db_name: postfix
 
 opendkim:
-  domain: thorko
-  keys: ['thorko.private', 'thorko.txt']
+  domain: <yourdomain>
+  keys: ['yourdomain.private', 'yourdomain.txt'] 
 
 sqlgrey:
   db_name: sqlgrey
