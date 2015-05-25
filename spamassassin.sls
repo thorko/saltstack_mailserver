@@ -19,7 +19,7 @@
     - group: root
     - mode: 0644
 
-{% for spam in 'thorko_rules.cf', 'keys.text', 'channels.text' %}
+{% for spam in 'keys.text', 'channels.text' %}
 /etc/spamassassin/{{ spam }}:
   file.managed:
     - source: salt://files/spamassassin/{{ spam }}
@@ -65,7 +65,6 @@ spamassassin:
     - reload: True
     - watch:
       - file: /etc/spamassassin/local.cf
-      - file: /etc/spamassassin/thorko_rules.cf
     - require:
       - user: spamd
       - pkg: spamassassin
