@@ -1,0 +1,139 @@
+# This is the right place to customize your installation of SpamAssassin.
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+# Only a small subset of options are listed below
+#
+###########################################################################
+include /etc/spamassassin/include.d/malware.cf
+include /etc/spamassassin/include.d/70_zmi_german.cf
+
+loadplugin Mail::SpamAssassin::Plugin::Bayes
+
+allow_user_rules 1
+
+# sql settings
+user_scores_dsn                  DBI:mysql:{{ pillar['roundcube']['database'] }}:localhost:3306
+user_scores_sql_password         {{ pillar['roundcube']['dbpass'] }}
+user_scores_sql_username         {{ pillar['roundcube']['dbuser'] }}
+user_scores_sql_custom_query     SELECT preference, value FROM spam_userpref WHERE username = _USERNAME_ OR username = '$GLOBAL' OR username = CONCAT('%',_DOMAIN_) ORDER BY username ASC
+
+#   Add *****SPAM***** to the Subject header of spam e-mails
+#
+rewrite_header Subject *****SPAM*****
+
+
+#   Save spam messages as a message/rfc822 MIME attachment instead of
+#   modifying the original message (0: off, 2: use text/plain instead)
+#
+report_safe 0
+
+
+#   Set which networks or hosts are considered 'trusted' by your mail
+#   server (i.e. not spammers)
+#
+# trusted_networks 212.17.35.
+
+#   Set file-locking method (flock is not safe over NFS, but is faster)
+#
+# lock_method flock
+
+
+#   Set the threshold at which a message is considered spam (default: 5.0)
+#
+required_score 2.5
+
+#   Use Bayesian classifier (default: 1)
+#
+use_learner                 		1
+use_bayes		                    1
+bayes_auto_learn	                1
+bayes_path                          /var/spool/bayes/bayes
+bayes_file_mode		                0777
+bayes_min_ham_num	                5
+bayes_min_spam_num	                5
+bayes_auto_learn_threshold_spam     6
+score BAYES_05                      3                                                                                                                                                                                                                    
+score BAYES_50                      3
+score BAYES_95                      8                                                                                                                                                                                                                    
+score BAYES_99                      9 
+
+
+#   Bayesian classifier auto-learning (default: 1)
+#
+
+
+skip_rbl_checks         0
+use_pyzor               1
+pyzor_max		3
+
+#   Set headers which may provide inappropriate cues to the Bayesian
+#   classifier
+#
+# bayes_ignore_header X-Bogosity
+# bayes_ignore_header X-Spam-Flag
+# bayes_ignore_header X-Spam-Status
+ok_locales		de en
+
+# whitelisting
+#whitelist_from some@email.com
+
+# blacklisting
+blacklist_from *@clickandbuy.com *@newsletter.preisvergleich.de *@news.geld.de *@messages5.com *@pepperos*
+
+##################
+# DKIM settings  #
+##################
+# whitelist_from_dkim *@googlemail.com googlemail.com
+score USER_IN_DKIM_WHITELIST -2.0
+score DKIM_VERIFIED -0.4
+score DKIM_POLICY_TESTING 0
+
+
+# manual stock spam checks
+body     __AW_PH1  /WEEKLY\/MONTHLY SALARY\/WAGES:/
+body     __AW_PH2  /NUMBER OF JOB EXPERIENCES:/
+meta     AW_PHISH1 (__AW_PH1 + __AW_PH2) > 1
+describe AW_PHISH1 Phishing mail
+score    AW_PHISH1 3
+
+body     __AW_BS1  /KAUFEN KAUFEN KAUFEN/
+body     __AW_BS2  /DER I[_.]?N[_.]?VESTORALARM!/
+body     __AW_BS3  /DIE RALLYE IST GESTARTET!/
+body     __AW_BS4  /AN ALLE F[_.]?INANZINVESTOREN!/
+body     __AW_BS5  /DIESE A[_.]?KTIE WIRD D[_.]?URCHSTARTEN!/
+body     __AW_BS6  /L[_.]?ASSEN SIE SICH D[_.]?IESE C[_.]?HANCE N[_.]?ICHT E[_.]?NTGEHEN!/
+body     __AW_BS7  /ES IST EIN U[_.]?NGLAUBLICHES P[_.]?ROFITPOTENTIAL!/
+body     __AW_BS8  /STOCK TRADER ALERT!/
+body     __AW_BS9  /V[_.]?ERLIERE D[_.]?IESE C[_.]?HANCE N[_.]?ICHT!/
+body     __AW_BS10 /IST FRANKFURT DAS NEUE/
+body     __AW_BS11 /DIESES ist das, das du gewartet hast!/
+body     __AW_BS12 /Unsere Auswahl des Monats fliegt!!!/
+body     __AW_BS13 /Our pick of the Month is Flying!!!/
+body     __AW_BS14 /Our Best Pick of the Week/
+meta     AW_BOERSENSPAM __AW_BS1 || __AW_BS2 || __AW_BS3 || __AW_BS4 || __AW_BS5 || __AW_BS6 || __AW_BS7 || __AW_BS8 || __AW_BS9 || __AW_BS10 || __AW_BS11 || __AW_BS12 || __AW_BS13 || __AW_BS14
+describe AW_BOERSENSPAM   Promotion fuer penny stocks
+score    AW_BOERSENSPAM   3.5
+
+body     __AW_PS1  /\b(?:C[_.]?ompany|Name ): /
+body     __AW_PS2  /\bW[_.]?KN\b/
+body     __AW_PS3  /\bI[_.]?SIN\b/
+body     __AW_PS4  /\b(?:M[_.]?arkt|Borsenplatz ): /
+body     __AW_PS5  /\b(?:K[_.]?urzel |Symbol): /
+body     __AW_PS6  /\b(?:P[_.]?reis|L[_.]?etzte?r Kurs|Price|Last price): [01]?[.,]/
+body     __AW_PS7  /\bPr[_.]?ognose: /
+body     __AW_PS8  /\b(?:S[_.]?panne|Weekrange): /
+meta     AW_BOERSENSPAM2  (__AW_BS1 + __AW_BS2 + __AW_BS3 + __AW_BS4 + __AW_BS5 + __AW_BS6 + __AW_BS7 + __AW_BS8 + __AW_BS9 + __AW_BS10 + __AW_BS11 + __AW_BS12 + __AW_BS13 + __AW_BS14 +__AW_PS1 + __AW_PS2 + __AW_PS3 + __AW_PS4 + __AW_PS5 + __AW_PS6 + __AW_PS7 + __AW_PS8 > 3 )
+describe AW_BOERSENSPAM2  Promotion fuer penny stocks 2
+score    AW_BOERSENSPAM2  3.5
+
+header   RCVD_IN_NJABL_RBL eval:check_rbl('njabl-notfirsthop', 'combined.njabl.org.')
+describe RCVD_IN_NJABL_RBL NJABL: sent directly from dynamic IP address
+tflags   RCVD_IN_NJABL_RBL net
+score    RCVD_IN_NJABL_RBL 3.0
+
+body URLBL_RBLJP eval:check_uridnsbl('URLBL_RBLJP')
+describe URLBL_RBLJP Has URI in url.rbl.jp
+tflags URLBL_RBLJP net
+score URLBL_RBLJP 4.0
