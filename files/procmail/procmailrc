@@ -1,0 +1,46 @@
+# Procmail
+USER=$1
+DOMAIN=$2
+SHELL="/bin/bash"
+SENDMAIL="/usr/sbin/sendmail -oi -t"
+DROPPRIVS=yes
+LOGFILE="/var/log/procmail"
+VERBOSE=on
+
+# Mailbox-Zustellung
+DELIVER="/usr/local/dovecot/current/libexec/dovecot/deliver -d $USER@$DOMAIN"
+# fallback
+DEFAULT="$HOME/$USER@$DOMAIN/Maildir/"
+MAILDIR="$HOME/$USER@$DOMAIN/Maildir/"
+CHECK=1
+
+:0 w
+* ^X-Antivirus-Avg:.*mail infected
+| $DELIVER -m Junk
+#/dev/null
+
+# check for spam
+:0fw
+* < 256000
+| /usr/bin/spamc -u $USER
+
+#:0fw: bogofilter.lock
+#* ^X-Spam-Status: No
+#* !^X-Spam-Status:.*USER_IN_WHITELIST
+#| /usr/local/bogofilter/current/bin/bogofilter -u -e -p -l
+
+:0 w
+* ^Subject: \*\*\*\*\*SPAM\*\*\*\*\*
+| $DELIVER -m Junk
+
+# zur mailbox zustellen
+:0 w
+| $DELIVER
+
+
+# schluss
+:0w
+{
+	EXITCODE=$?
+	HOST
+}
