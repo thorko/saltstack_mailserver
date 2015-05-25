@@ -1,3 +1,12 @@
+# create key if not existing
+{% if 1 == salt['cmd.retcode']("test -f /etc/dkim/{{ pillar['opendkim']['domain'] }}.private") %}
+/usr/bin/opendkim-genkey -D /etc/dkim -d {{ pillar['opendkim']['domain'] }}.de -s {{ pillar['opendkim']['domain'] }}:
+  cmd.run:
+    - user: root
+    - group: root
+    - shell: /bin/bash
+{% endif %}
+
 opendkim:
   user.present:
     - fullname: opendkim
