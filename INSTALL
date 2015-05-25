@@ -1,0 +1,21 @@
+REQUIREMENTS
+------------
+- make sure you have a mysql server running and 
+  root user and password has been configured in pillar/vars.sls
+- install salt-minion and configure it
+  file_client: local
+  file_roots:
+  base:
+    - /opt/salt
+  pillar_roots:
+  base:
+    - /opt/salt/pillar
+  log_level: warning
+
+INSTALLATION
+--------------------
+- install all files in /opt/salt or whatever your configured in your minion
+- configure vars
+  go to pillar/vars.sls and configure your settings
+- run salt
+  ~$ salt-call --local state.highstate
