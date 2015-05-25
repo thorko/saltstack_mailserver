@@ -1,0 +1,1 @@
+*@{{ pillar['opendkim']['domain'] }}.de:{{ pillar['opendkim']['domain'] }}.de:/etc/dkim/{{ pillar['opendkim']['domain'] }}
