@@ -1,0 +1,19 @@
+# Authentication for passwd-file users. Included from auth.conf.
+#
+# passwd-like file with specified location.
+# <doc/wiki/AuthDatabase.PasswdFile.txt>
+passdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-mysql.conf
+#  connect = host=/var/run/mysqld/mysqld.sock dbname=postfix user=postfix password=auSh.eeGh9
+#  password_query = SELECT userid AS local_part, domain, password FROM mailbox WHERE local_part='%n' AND domain='%d'
+#  user_query = SELECT '/var/spool/dovecot/%n' AS home, 1011 AS uid, 1011 AS gid FROM  WHERE local_part='%n' AND domain='%d'
+#  iterate_query = SELECT userid AS local_part, domain FROM mailbox
+}
+
+userdb {
+  driver = static
+  args = uid=dovecot gid=dovecot home=/var/spool/dovecot/%u
+}
+
+
