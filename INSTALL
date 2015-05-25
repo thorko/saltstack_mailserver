@@ -1,5 +1,6 @@
 REQUIREMENTS
 ------------
+- you need to install avg free (antivirus) for linux
 - make sure you have a mysql server running and 
   root user and password has been configured in pillar/vars.sls
 - install salt-minion and configure it
