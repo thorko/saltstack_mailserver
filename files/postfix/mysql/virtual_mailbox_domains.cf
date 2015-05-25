@@ -1,0 +1,5 @@
+hosts=127.0.0.1
+user={{ pillar['postfix']['db_user'] }}
+password={{ pillar['postfix']['db_pass'] }}
+dbname={{ pillar['postfix']['db_name'] }}
+query = SELECT domain FROM domain WHERE domain='%s' and backupmx = 0 and active = 1
