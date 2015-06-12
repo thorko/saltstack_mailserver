@@ -5,6 +5,9 @@
     - makedirs: True
     - mode: 0755
     - clean: True
+    - require:
+      - user: sqlgrey
+      - group: sqlgrey
 
 /etc/sqlgrey/sqlgrey.conf:
   file.managed:
@@ -13,8 +16,13 @@
     - group: sqlgrey
     - mode: 0644
     - template: jinja
+    - require:
+      - user: sqlgrey
+      - group: sqlgrey
 
 sqlgrey:
+  pkg:
+    - installed
   mysql_user.present:
     - host: localhost
     - password: {{ pillar['sqlgrey']['db_pass'] }}
@@ -28,7 +36,7 @@ sqlgrey:
   user.present:
     - fullname: sqlgrey
     - shell: /bin/false
-    - home: /usr/local/sqlgrey/current
+    - home: /var/lib/sqlgrey
     - groups:
       - sqlgrey
   service:
