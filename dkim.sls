@@ -12,8 +12,6 @@ opendkim:
     - fullname: opendkim
     - shell: /bin/false
     - home: /var/run/opendkim
-    - uid: {{ pillar['users']['opendkim'] }}
-    - gid: {{ pillar['groups']['opendkim'] }}
     - groups:
       - opendkim
   pkg:

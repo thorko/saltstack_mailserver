@@ -27,13 +27,10 @@
 dovecot:
    group.present:
      - system: true
-     - gid: {{ pillar['groups']['dovecot'] }}
    user.present:
      - fullname: dovecot
      - home: /var/spool/dovecot
      - shell: /bin/false
-     - uid: {{ pillar['users']['dovecot'] }}
-     - gid: {{ pillar['groups']['dovecot'] }}
      - groups:
        - dovecot
    service:

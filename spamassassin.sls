@@ -46,13 +46,10 @@
 spamd:
   group.present:
     - system: true
-    - gid: {{ pillar['groups']['spamd'] }}
   user.present:
     - fullname: spamd
     - shell: /bin/false
     - home: /var/spool/bayes
-    - uid: {{ pillar['users']['spamd'] }}
-    - gid: {{ pillar['groups']['spamd'] }}
     - groups:
       - spamd
 
@@ -75,8 +72,6 @@ spampd:
   user.present:
     - fullname: spampd
     - shell: /bin/false
-    - uid: {{ pillar['users']['spampd'] }}
-    - gid: {{ pillar['groups']['spampd'] }}
     - groups:
       - spampd
   service:

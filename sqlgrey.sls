@@ -25,13 +25,10 @@ sqlgrey:
       - LC_ALL: "en_US.utf8"
   group.present:
     - system: true
-    - gid: {{ pillar['groups']['sqlgrey'] }}
   user.present:
     - fullname: sqlgrey
     - shell: /bin/false
     - home: /usr/local/sqlgrey/current
-    - uid: {{ pillar['users']['sqlgrey'] }}
-    - gid: {{ pillar['groups']['sqlgrey'] }}
     - groups:
       - sqlgrey
   service:
