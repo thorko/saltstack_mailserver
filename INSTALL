@@ -1,7 +1,7 @@
 REQUIREMENTS
 ------------
 - you need to install avg free (antivirus) for linux
-- make sure you have a mysql server running and 
+- make sure you have a mariadb server running and 
   root user and password has been configured in pillar/vars.sls
 - create SSL certificate for your domain and place it under files/postfix/ssl
   certificate needs to be called "mail.pem"

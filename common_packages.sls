@@ -2,5 +2,5 @@ packages:
   pkg.installed:
     - pkgs:
       - python-mysqldb
-      - mysql-client
+      - mariadb-client
       - opendkim-tools
