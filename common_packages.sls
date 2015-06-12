@@ -1,6 +1,6 @@
 packages:
   pkg.installed:
-    - pkgs
+    - pkgs:
       - python-mysqldb
       - mysql-client
       - opendkim-tools
