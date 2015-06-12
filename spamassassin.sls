@@ -11,6 +11,8 @@
     - user: root
     - group: spampd
     - mode: 0640
+    - require:
+      - group: spampd
 
 /etc/default/spampd:
   file.managed:
@@ -26,6 +28,8 @@
     - user: root
     - group: root
     - mode: 0644
+    - require:
+      - pkg: spamassassin
 {% endfor %}
 
 /etc/spamassassin/local.cf:
@@ -35,6 +39,8 @@
      - group: root
      - mode: 0644
      - template: jinja
+     - require:
+       - pkg: spamassassin
 
 /etc/spamassassin/update-spamassassin.sh:
   file.managed:
@@ -42,6 +48,8 @@
     - user: root
     - group: root
     - mode: 0755
+    - require:
+      - pkg: spamassassin
 
 spamd:
   group.present:
@@ -69,6 +77,8 @@ spamassassin:
 spampd:
   pkg: 
     - installed
+  group.present:
+    - system: True
   user.present:
     - fullname: spampd
     - shell: /bin/false

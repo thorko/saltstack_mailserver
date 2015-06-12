@@ -14,9 +14,9 @@ loadplugin Mail::SpamAssassin::Plugin::Bayes
 allow_user_rules 1
 
 # sql settings
-user_scores_dsn                  DBI:mysql:{{ pillar['roundcube']['database'] }}:localhost:3306
-user_scores_sql_password         {{ pillar['roundcube']['dbpass'] }}
-user_scores_sql_username         {{ pillar['roundcube']['dbuser'] }}
+user_scores_dsn                  DBI:mysql:{{ pillar['spamassassin']['database'] }}:localhost:3306
+user_scores_sql_password         {{ pillar['spamassassin']['dbpass'] }}
+user_scores_sql_username         {{ pillar['spamassassin']['dbuser'] }}
 user_scores_sql_custom_query     SELECT preference, value FROM spam_userpref WHERE username = _USERNAME_ OR username = '$GLOBAL' OR username = CONCAT('%',_DOMAIN_) ORDER BY username ASC
 
 #   Add *****SPAM***** to the Subject header of spam e-mails

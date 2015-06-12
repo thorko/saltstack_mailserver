@@ -31,3 +31,8 @@ mysql:
   key_buffer: 16M
   root_user: root
   root_pass: <your mysql root password>
+
+spamassassin:
+  database: spamassassin
+  dbuser: spamassassin
+  dbpass: <you password>
