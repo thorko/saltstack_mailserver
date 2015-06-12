@@ -6,6 +6,7 @@ REQUIREMENTS
 - create SSL certificate for your domain and place it under files/postfix/ssl
   certificate needs to be called "mail.pem"
   private key file needs to be called "ssl.key"
+- create your dkim keys and place it in files/dkim
 - install salt-minion and configure it
   file_client: local
   file_roots:

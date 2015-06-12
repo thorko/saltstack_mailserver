@@ -1,3 +1,13 @@
+/etc/postfix/mysql:
+  file.directory:
+    - user: postfix
+    - group: postfix
+    - mode: 0755
+    - makedirs: True
+    - require:
+      - user: postfix
+      - group: postfix
+  
 {% for sql_conf in 'relay_domains', 'virtual_alias_maps', 'virtual_mailbox_domains', 'virtual_mailbox_maps' %}
 /etc/postfix/mysql/{{ sql_conf }}.cf:
   file.managed:
@@ -6,6 +16,9 @@
     - user: postfix
     - group: postfix
     - template: jinja
+    - require:
+      - user: postfix
+      - group: postfix
 {% endfor %}
 
 {% for cfg in 'main.cf', 'master.cf' %}
@@ -16,6 +29,9 @@
     - group: postfix
     - template: jinja
     - mode: 0644
+    - require:
+      - user: postfix
+      - group: postfix
 {% endfor %}
 
 # copy ssl certs
@@ -27,6 +43,9 @@
     - file_mode: 0644
     - dir_mode: 0755
     - include_empty: True
+    - require:
+      - user: postfix
+      - group: postfix
 
 # this is for googlemail
 /etc/postfix/transport_map.db:
@@ -35,6 +54,9 @@
     - user: postfix
     - group: postfix
     - mode: 0644
+    - require:
+      - user: postfix
+      - group: postfix
 
 postfix:
   pkg:
@@ -47,6 +69,8 @@ postfix:
     - connection_charset: utf8
     - saltenv:
       - LC_ALL: "en_US.utf8"
+  group.present:
+    - system: True
   user.present:
     - fullname: Postfix mail user
     - home: /var/spool/postfix
