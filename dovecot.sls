@@ -7,6 +7,12 @@
     - require:
       - pkg: dovecot-packages
 
+/etc/ssl/certs/ca-bundle.crt:
+  file.managed:
+    - source: salt://files/postfix/ssl/ca-bundle.crt
+    - user: root
+    - group: root
+
 /etc/dovecot/dovecot.conf:
   file.managed:
     - source: salt://files/dovecot/dovecot.conf
@@ -31,6 +37,8 @@ dovecot-packages:
        - dovecot-mysql
        - dovecot-sieve
        - dovecot-imapd
+       - dovecot-pop3d
+       - dovecot-lmtpd
 
 dovecot:
    group.present:
