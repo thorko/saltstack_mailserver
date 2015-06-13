@@ -4,7 +4,6 @@
     - group: sqlgrey
     - makedirs: True
     - mode: 0755
-    - clean: True
     - require:
       - user: sqlgrey
       - group: sqlgrey

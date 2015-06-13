@@ -7,6 +7,7 @@ REQUIREMENTS
   certificate needs to be called "mail.pem"
   private key file needs to be called "ssl.key"
 - create your dkim keys and place it in files/dkim
+  calle it <yourdomain>.private and <yourdomain>.txt
 - install salt-minion and configure it
   file_client: local
   file_roots:
