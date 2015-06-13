@@ -4,12 +4,16 @@
     - include_empty: True
     - user: root
     - group: root
+    - require:
+      - pkg: dovecot-packages
 
 /etc/dovecot/dovecot.conf:
   file.managed:
     - source: salt://files/dovecot/dovecot.conf
     - user: root
     - group: root
+    - require:
+      - pkg: dovecot-packages
 
 # mysql config for dovecot
 /etc/dovecot/dovecot-mysql.conf:
@@ -18,11 +22,15 @@
     - user: root
     - group: root
     - template: jinja
+    - require:
+      - pkg: dovecot-packages
 
-/usr/local/bin/doveadm:
-  file.symlink:
-    - target: /usr/local/dovecot/current/bin/doveadm
-    - force: true
+dovecot-packages:
+   pkg.installed:
+     - pkgs:
+       - dovecot-mysql
+       - dovecot-sieve
+       - dovecot-imapd
 
 dovecot:
    group.present:
