@@ -9,6 +9,18 @@
       - user: sqlgrey
       - group: sqlgrey
 
+{% for conf in 'clients_fqdn_whitelist', 'clients_ip_whitelist', 'discrimination.regexp', 'dyn_fqdn.regexp', 'smtp_server.regexp' %}
+/etc/sqlgrey/{{ conf }}:
+  file.managed:
+    - source: salt://files/sqlgrey/{{ conf }}
+    - user: sqlgrey
+    - group: sqlgrey
+    - mode: 0644
+    - require:
+      - user: sqlgrey
+      - group: sqlgrey
+{% endfor %}
+
 /etc/sqlgrey/sqlgrey.conf:
   file.managed:
     - source: salt://files/sqlgrey/sqlgrey.conf
